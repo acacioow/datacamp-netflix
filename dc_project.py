@@ -41,3 +41,7 @@ drtn = pd.to_numeric(netflix_movies_col_subset["duration"])
 plt.scatter(rlsy, drtn)
 plt.title("Movie Duration by Year of Release")
 plt.show()
+
+#CREATING SHORT_MOVIES DATAFRAME (< 60 MINUTES)
+short_movies = netflix_movies_col_subset[drtn < 60]
+print(short_movies)
