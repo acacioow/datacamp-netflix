@@ -21,7 +21,7 @@ print(durations_df)
 #CREATE LINE PLOT
 plt.plot(years, durations)
 plt.title("Netflix Movie Durations 2011-2020")
-plt.show()
+#plt.show()
 
 #READ CSV DATAFRAME
 netflix_df = pd.read_csv("./netflix_data.csv")
@@ -32,7 +32,6 @@ netflix_df_movies_only = netflix_df[netflix_df["type"] == "Movie"]
 
 #SELECTING COLUMNS OF INTEREST
 netflix_movies_col_subset = netflix_df_movies_only[["title", "country", "listed_in", "release_year", "duration"]]
-print(netflix_movies_col_subset[0:5])
 
 #CREATING SCATTER PLOT:  RELEASE YEAR X DURATION
 rlsy = pd.to_numeric(netflix_movies_col_subset["release_year"])
@@ -40,8 +39,33 @@ drtn = pd.to_numeric(netflix_movies_col_subset["duration"])
 
 plt.scatter(rlsy, drtn)
 plt.title("Movie Duration by Year of Release")
-plt.show()
+#plt.show()
 
 #CREATING SHORT_MOVIES DATAFRAME (< 60 MINUTES)
 short_movies = netflix_movies_col_subset[drtn < 60]
-print(short_movies)
+
+#MARKING NON-FEATURE FILMS (RED/CHILDREN, BLUE/DOCS, GREEN/STAND-UP, OTHERS/BLACK)
+colors = []
+
+for lab, row in netflix_movies_col_subset.iterrows() :
+    if  row["listed_in"] == "Children & Family Movies":
+        colors.append("red")
+    elif row["listed_in"] == "Documentaries" or row["listed_in"] == "Docuseries":
+        colors.append("blue")
+    elif row["listed_in"] == "Stand-Up" or row["listed_in"] == "Comedies":
+        colors.append("green")
+    else:
+        colors.append("black")
+
+plt.style.use('fivethirtyeight')
+fig = plt.figure(figsize=(12,8))
+
+plt.scatter(rlsy, drtn, c=colors)
+
+plt.title("Movie duration by year of release")
+plt.xlabel("Release Year")
+plt.ylabel("Duration (min)")
+
+plt.show()
+
+#ANALYSING THE DATAS WE CAN CONCLUDE THAT MOVIES ARE NOT GETTING SHORTER!!!
